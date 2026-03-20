@@ -1,90 +1,51 @@
-# AMORA Photography Portfolio Website
+# abab [![npm version](https://badge.fury.io/js/abab.svg)](https://www.npmjs.com/package/abab) [![Build Status](https://travis-ci.org/jsdom/abab.svg?branch=master)](https://travis-ci.org/jsdom/abab)
 
-A beautiful, modern photography portfolio website for AMORA by Amisha Perera, built with React.js.
+A JavaScript module that implements `window.atob` and `window.btoa` according the forgiving-base64 algorithm in the [Infra Standard](https://infra.spec.whatwg.org/#forgiving-base64). The original code was forked from [w3c/web-platform-tests](https://github.com/w3c/web-platform-tests/blob/master/html/webappapis/atob/base64.html).
 
-## Features
+Compatibility: Node.js version 3+ and all major browsers.
 
-- **Responsive Design**: Fully responsive layout that works on all devices
-- **Modern UI**: Clean, elegant design with a light beige background and gold accents
-- **Smooth Navigation**: Smooth scrolling navigation between sections
-- **Contact Form**: Functional contact form with validation
-- **Gallery Section**: Showcase of photography work
-- **About Section**: Information about the photographer
-- **Social Media Integration**: Links to social media platforms
+Install with `npm`:
 
-## Sections
-
-1. **Header**: Logo and navigation menu
-2. **Hero Section**: Image grid showcasing featured work
-3. **Intro Text**: Introduction and mission statement
-4. **Image Banners**: Full-width horizontal image displays
-5. **Gallery**: Portfolio grid with multiple images
-6. **About Us**: Information about the photographer with social media links
-7. **Contact Us**: Contact information and contact form
-8. **Footer**: Additional contact info and social links
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm or yarn
-
-### Installation
-
-1. Install dependencies:
-```bash
-npm install
+```sh
+npm install abab
 ```
 
-2. Start the development server:
-```bash
-npm start
+## API
+
+### `btoa` (base64 encode)
+
+```js
+const { btoa } = require('abab');
+btoa('Hello, world!'); // 'SGVsbG8sIHdvcmxkIQ=='
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### `atob` (base64 decode)
 
-### Building for Production
-
-To create a production build:
-
-```bash
-npm run build
+```js 
+const { atob } = require('abab');
+atob('SGVsbG8sIHdvcmxkIQ=='); // 'Hello, world!'
 ```
 
-This builds the app for production to the `build` folder.
+#### Valid characters
 
-## Customization
+[Per the spec](https://html.spec.whatwg.org/multipage/webappapis.html#atob:dom-windowbase64-btoa-3), `btoa` will accept strings "containing only characters in the range `U+0000` to `U+00FF`." If passed a string with characters above `U+00FF`, `btoa` will return `null`. If `atob` is passed a string that is not base64-valid, it will also return `null`. In both cases when `null` is returned, the spec calls for throwing a `DOMException` of type `InvalidCharacterError`.
 
-### Adding Images
+## Browsers
 
-Replace the placeholder divs in the components with actual image tags:
+If you want to include just one of the methods to save bytes in your client-side code, you can `require` the desired module directly.
 
-```jsx
-// Instead of:
-<div className="image-placeholder">...</div>
-
-// Use:
-<img src="/path/to/image.jpg" alt="Description" />
+```js
+const atob = require('abab/lib/atob');
+const btoa = require('abab/lib/btoa');
 ```
 
-### Updating Contact Information
+## Development
 
-Edit the contact details in `src/components/ContactUs.js` and `src/components/Footer.js`.
+If you're **submitting a PR** or **deploying to npm**, please use the [checklists in CONTRIBUTING.md](CONTRIBUTING.md#checklists).
 
-### Changing Colors
+## Remembering what `atob` and `btoa` stand for
 
-The main color scheme is defined in the CSS files:
-- Background: `#F5F5DC` (light beige)
-- Accent: `#D4AF37` (gold)
-- Text: `#2C2C2C` (dark gray)
+Base64 comes from IETF [RFC 4648](https://tools.ietf.org/html/rfc4648#section-4) (2006). 
 
-## Technologies Used
-
-- React.js 18.2.0
-- CSS3
-- Google Fonts (Playfair Display, Inter)
-
-## License
-
-Copyright © 2024 Amisha Perera Photography.
+- **`btoa`**, the encoder function, stands for **binary** to **ASCII**, meaning it converts any binary input into a subset of **ASCII** (Base64).
+- **`atob`**, the decoder function, converts **ASCII** (or Base64) to its original **binary** format. 
